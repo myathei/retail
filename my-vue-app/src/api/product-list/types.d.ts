@@ -28,7 +28,4 @@ export type UpdateProduct = {
     stock:number,
     sellingPrice:number,
     profitPerItem:number,
-    updatedBy:string,
-    activeFlag: boolean
-    
 }

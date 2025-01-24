@@ -40,7 +40,6 @@ const props = defineProps<{
 
 const formSchema = toTypedSchema(
   z.object({
-    productCode: z.string().min(2).max(50),
     productName: z.string().min(2).max(50),
     sellingPrice: z.number().min(1),
     stock: z.number().min(1),
@@ -74,7 +73,7 @@ const { mutate: AddProduct } = addProduct.useMutation({
   },
   onSettled: () => {
     queryClient.invalidateQueries({
-      queryKey: ["getAllProducts"],
+      queryKey: ["getAllProduct"],
     });
   },
 });
@@ -91,7 +90,7 @@ const { mutate: UpdateProduct } = updateProduct.useMutation({
       title: data.message,
     });
     queryClient.invalidateQueries({
-      queryKey: ["getAllProducts"],
+      queryKey: ["getAllProduct"],
     });
     closeDialog();
   },
@@ -101,7 +100,7 @@ const onSubmit = handleSubmit((values) => {
   try {
     const payload = props.isEdit
       ? {
-          productID: props?.product?.productID,
+          productID: props.product?.productID,
           productName: values.productName,
           stock: values.stock,
           sellingPrice: values.sellingPrice,
@@ -115,6 +114,7 @@ const onSubmit = handleSubmit((values) => {
         };
 
     if (props.isEdit) {
+      console.log(payload);
       UpdateProduct(payload as ProductType);
     } else {
       AddProduct(payload as ProductType);
@@ -154,64 +154,117 @@ const closeDialog = () => {
 
 <template>
   <Dialog v-model:open="props.isOpen">
-    <DialogContent class="sm:max-w-[425px]">
-      <DialogHeader>
-        <DialogTitle class="text-blue-500"
-          >{{ props.isEdit ? "Update " : "Add " }}Product Info</DialogTitle
-        >
+    <DialogContent class="bg-white shadow-lg rounded-lg">
+      <DialogHeader class="bg-blue-50 p-4 rounded-t">
+        <DialogTitle class="text-blue-500 text-lg font-semibold">
+          {{ props.isEdit ? "Update " : "Add " }}Product Info
+        </DialogTitle>
       </DialogHeader>
 
-      <form id="dialogForm" @submit="onSubmit">
+      <form id="dialogForm" @submit.prevent="onSubmit" class="p-4">
         <FormField v-slot="{ componentField }" name="productName">
-          <FormItem>
-            <FormLabel>Product Name</FormLabel>
+          <FormItem class="mb-4">
+            <FormLabel class="block mb-1 font-medium text-gray-700">
+              Product Name
+            </FormLabel>
             <FormControl>
-              <Input type="text" v-bind="componentField" />
+              <Input
+                type="text"
+                v-bind="componentField"
+                placeholder="Enter product name"
+                class="w-full border rounded px-3 py-2"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage
+              class="text-red-500 text-sm h-4 mt-1"
+              style="min-height: 1rem;"
+            />
           </FormItem>
         </FormField>
+
         <FormField v-slot="{ componentField }" name="sellingPrice">
-          <FormItem>
-            <FormLabel>Price</FormLabel>
+          <FormItem class="mb-4">
+            <FormLabel class="block mb-1 font-medium text-gray-700">
+              Price
+            </FormLabel>
             <FormControl>
-              <Input type="number" v-bind="componentField" min="0" />
+              <Input
+                type="number"
+                v-bind="componentField"
+                placeholder="Enter price"
+                min="0"
+                class="w-full border rounded px-3 py-2"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage
+              class="text-red-500 text-sm h-4 mt-1"
+              style="min-height: 1rem;"
+            />
           </FormItem>
         </FormField>
+
         <FormField v-slot="{ componentField }" name="stock">
-          <FormItem>
-            <FormLabel>Stock</FormLabel>
+          <FormItem class="mb-4">
+            <FormLabel class="block mb-1 font-medium text-gray-700">
+              Stock
+            </FormLabel>
             <FormControl>
-              <Input type="number" v-bind="componentField" min="0" />
+              <Input
+                type="number"
+                v-bind="componentField"
+                placeholder="Enter stock quantity"
+                min="0"
+                class="w-full border rounded px-3 py-2"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage
+              class="text-red-500 text-sm h-4 mt-1"
+              style="min-height: 1rem;"
+            />
           </FormItem>
         </FormField>
+
         <FormField v-slot="{ componentField }" name="profitPerItem">
-          <FormItem>
-            <FormLabel>Profit Per Item</FormLabel>
+          <FormItem class="mb-4">
+            <FormLabel class="block mb-1 font-medium text-gray-700">
+              Profit Per Item
+            </FormLabel>
             <FormControl>
-              <Input type="number" v-bind="componentField" min="0" />
+              <Input
+                type="number"
+                v-bind="componentField"
+                placeholder="Enter profit per item"
+                min="0"
+                class="w-full border rounded px-3 py-2"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage
+              class="text-red-500 text-sm h-4 mt-1"
+              style="min-height: 1rem;"
+            />
           </FormItem>
         </FormField>
       </form>
 
-      <DialogFooter>
-        <Button @click="closeDialog" type="button" variant="secondary">
+      <DialogFooter class="flex justify-end p-4 bg-gray-50 rounded-b">
+        <Button
+          @click="closeDialog"
+          type="button"
+          variant="secondary"
+          class="bg-gray-300 text-gray-700 hover:bg-gray-400 px-4 py-2 rounded mr-2"
+        >
           Close
         </Button>
         <Button
           type="submit"
           form="dialogForm"
-          class="bg-green-500 hover:bg-green-600"
+          class="bg-green-500 text-white hover:bg-green-600 px-4 py-2 rounded"
         >
-          Save Product
+          {{ props.isEdit ? "Update Product" : "Save Product" }}
         </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>
+
+

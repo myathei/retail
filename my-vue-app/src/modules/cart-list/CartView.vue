@@ -8,7 +8,15 @@ import {
 } from "@/components/ui/table";
 import Button from "@/components/ui/button/Button.vue";
 import { useCartStore } from "@/api/cart-list/useCartStore";
-import { ArrowBigLeft, BackpackIcon, BellPlus, MinusIcon, Plus, PlusIcon, Trash2 } from "lucide-vue-next";
+import {
+  ArrowBigLeft,
+  BackpackIcon,
+  BellPlus,
+  MinusIcon,
+  Plus,
+  PlusIcon,
+  Trash2,
+} from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import { useToast } from "@/components/ui/toast";
 
@@ -19,14 +27,14 @@ export interface Product {
   sellingPrice: number;
 }
 const cartStore = useCartStore();
-const {toast} = useToast();
+const { toast } = useToast();
 
 // Remove product from cart
 const removeFromCart = (product: Product) => {
   toast({
-        description: product.productName + ' Remove Successfull!',
-        duration: 1000,
-      });
+    description: product.productName + " Remove Successfull!",
+    duration: 1000,
+  });
   cartStore.removeProductFromCart(product);
 };
 
@@ -53,11 +61,12 @@ const decrementQuantity = (product: Product) => {
 
 <template>
   <div class="p-3 space-y-3">
-    
     <h3 class="italic py-2">Cart Items</h3>
-   <RouterLink to = '/product'>
-    <button class="bg-blue-300 border rounded-md py-2 px-2"><ArrowBigLeft class="w-4 h-4"/></button>
-   </RouterLink>
+    <RouterLink to="/product">
+      <button class="bg-blue-300 border rounded-md py-2 px-2">
+        <ArrowBigLeft class="w-4 h-4" />
+      </button>
+    </RouterLink>
     <div v-if="cartStore.cartItems.length > 0" class="border rounded-md">
       <Table>
         <TableHeader class="bg-pink-100 font-bold">
@@ -84,7 +93,7 @@ const decrementQuantity = (product: Product) => {
                 @click="decrementQuantity(item.product)"
                 :disabled="item.quantity === 1"
               >
-                <MinusIcon class="w-4 h-4"/>
+                <MinusIcon class="w-4 h-4" />
               </Button>
               <span>{{ item.quantity }}</span>
               <Button
@@ -93,7 +102,7 @@ const decrementQuantity = (product: Product) => {
                 @click="incrementQuantity(item.product)"
                 :disabled="item.quantity === item.product.stock"
               >
-              <Plus class="h-4 w-4" />
+                <Plus class="h-4 w-4" />
               </Button>
             </TableCell>
             <TableCell>${{ item.product.sellingPrice.toFixed(2) }}</TableCell>
@@ -132,10 +141,19 @@ const decrementQuantity = (product: Product) => {
       v-if="cartStore.cartItems.length > 0"
       class="flex justify-between items-center pt-4"
     >
-      <p class="text-lg font-bold">
-        Total: ${{ cartStore.totalCartPrice.toFixed(2) }}
+   <div>
+    <p class="text-lg font-bold">
+        Total Quantity: {{ cartStore.countCartItems }}
       </p>
-      <RouterLink to="/cashier"><Button variant="secondary" class="px-6 py-2">Cashier</Button></RouterLink>
+      <p class="text-lg font-bold">
+        Total Price: ${{ cartStore.totalCartPrice.toFixed(2) }}
+      </p>
+   </div>
+      <RouterLink to="/cashier"
+        ><Button variant="secondary" class="px-6 py-2"
+          >Cashier</Button
+        ></RouterLink
+      >
     </div>
   </div>
 </template>

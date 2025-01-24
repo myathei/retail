@@ -4,8 +4,8 @@ import ProductListView from "@/modules/product-list/ProductListView.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import CartView from "@/modules/cart-list/CartView.vue";
 import CashierView from "@/modules/cashier-page/CashierView.vue";
-import SaleReportView from "@/modules/manager-page/SaleReportView.vue";
-import SummaryReport from "@/modules/manager-page/SummaryReport.vue";
+import SaleReportView from "@/modules/manager-page/sale-report/SaleReportView.vue";
+import SummaryReport from "@/modules/manager-page/summary-report/SummaryReport.vue";
 import DashboardView from "@/modules/dashboard/DashboardView.vue";
 
 const router = createRouter({
